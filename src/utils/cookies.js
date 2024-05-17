@@ -8,8 +8,3 @@ export const getStoredCookie = (cookies, key) => {
     const value = cookieObject[key] || null;
     return value;
 };
-
-// module.exports = {
-//     getStoredCookie,
-// };
-

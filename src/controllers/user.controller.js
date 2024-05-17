@@ -2,13 +2,12 @@ import User from "../database/models/User";
 import {
   BadRequestError,
 } from "../utils/ApiError";
-
-//Yup is a JavaScript schema builder for value parsing and validation.
+import { getInternationalPhoneNumber } from '../utils/phone';
 
 let userController = {
   create: async (req, res, next) => {
     try {
-      const { email } = req.body;
+      const { email, mobile } = req.body;
 
       const userExists = await User.findOne({
         where: { email },
@@ -16,7 +15,11 @@ let userController = {
 
       if (userExists) throw new BadRequestError("User with this email already exists");
 
-      const user = await User.create(req.body);
+      const user = await User.create({
+        ...req.body,
+        email: email.toLowerCase().trim(),
+        mobile: getInternationalPhoneNumber(mobile)
+      });
 
       return res.status(201).json(user);
     } catch (error) {
@@ -50,7 +53,7 @@ let userController = {
 
   update: async (req, res, next) => {
     try {
-      const userData = req.body;
+      const { email, mobile, ...restData } = req.body;
 
       const user = await User.findByPk(req.params.id);
 
@@ -58,7 +61,11 @@ let userController = {
         throw new BadRequestError();
       }
 
-      const newUser = await user.update(userData);
+      const newUser = await user.update({
+        ...restData,
+        email: email.toLowerCase().trim(),
+        mobile: getInternationalPhoneNumber(mobile)
+      });
 
       return res.status(200).json(newUser);
     } catch (error) {
