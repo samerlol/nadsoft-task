@@ -1,3 +1,4 @@
+import { ACCESS_TOKEN } from '../constants/auth.constant';
 import authService from '../services/auth.service';
 
 class AuthController {
@@ -6,8 +7,7 @@ class AuthController {
     try {
       const { email } = req.body;
       const { user, token } = await authService.login(email);
-      // res.setHeader('x-auth-token', token);
-      res.cookie('accessToken', token, {
+      res.cookie(ACCESS_TOKEN, token, {
         secure: true,
         httpOnly: true,
         sameSite: true,

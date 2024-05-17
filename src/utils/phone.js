@@ -1,12 +1,12 @@
 import parsePhoneNumber from 'libphonenumber-js';
+import logger from '../logger';
 
 export const getInternationalPhoneNumber = ({ phoneNumber }) => {
     try {
-        console.log({ phoneNumber });
         const format = phoneNumber.includes('+') ? phoneNumber : `+${phoneNumber}`;
         return parsePhoneNumber(format).formatInternational();
     } catch (error) {
-        console.log(error);
+        logger.error(error);
     }
 };
 
@@ -18,7 +18,4 @@ export const isInternationalNumber = (phoneNumber) => {
         return false;
     }
 };
-// module.exports = {
-//     getInternationalPhoneNumber,
-//     isInternationalNumber
-// };
+

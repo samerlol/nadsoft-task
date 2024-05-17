@@ -1,10 +1,10 @@
 
 import jwt from 'jsonwebtoken';
 import { getStoredCookie } from '../utils/cookies';
+import { ACCESS_TOKEN } from '../constants/auth.constant';
 
 const authMiddleware = (req, res, next) => {
-    console.log({headers: req.headers.cookie})
-    const token = getStoredCookie(req.headers.cookie, 'accessToken');
+    const token = getStoredCookie(req.headers.cookie, ACCESS_TOKEN);
 
     if (!token) {
         return res.status(401).json({ error: 'Not authorized' });
